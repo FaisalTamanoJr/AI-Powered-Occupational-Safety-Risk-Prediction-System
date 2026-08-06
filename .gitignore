@@ -6,3 +6,4 @@ __pycache__/
 *.pyc
 .streamlit/              
 .ipynb_checkpoints/
+test_2_ignore/
