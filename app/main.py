@@ -1,9 +1,8 @@
 import tempfile
 
+import config
 import streamlit as st
 from pipeline import analyze_video, compute_video_risk, load_models
-
-import config
 
 st.set_page_config(page_title="Workplace Safety Video Analyzer", layout="wide")
 st.title("Workplace Safety Video Analyzer")
@@ -35,8 +34,6 @@ if uploaded_file:
         tmp.write(uploaded_file.read())
         video_path = tmp.name
 
-    st.video(video_path)
-
     progress_bar = st.progress(0.0, text="Analyzing video...")
 
     def update_progress(pct):
@@ -49,11 +46,16 @@ if uploaded_file:
 
     result = compute_video_risk(tracked)
 
-    st.subheader("Risk Summary")
-    col1, col2 = st.columns(2)
-    with col1:
+    # Video on the left (narrower), risk summary on the right — both visible
+    # at once without scrolling. Adjust the ratio below to taste.
+    video_col, summary_col = st.columns([1, 4])
+
+    with video_col:
+        st.video(video_path)
+
+    with summary_col:
+        st.subheader("Risk Summary")
         st.metric("Overall Risk Score", result["score"])
-    with col2:
         tier = result["tier"]
         color = TIER_COLORS.get(tier, "gray")
         st.markdown(
@@ -61,6 +63,7 @@ if uploaded_file:
             unsafe_allow_html=True,
         )
 
+    st.divider()
     st.subheader("Confirmed Violations")
     if result["violations"]:
         rows = []
