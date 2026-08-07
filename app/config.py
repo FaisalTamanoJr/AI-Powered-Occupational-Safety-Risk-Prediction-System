@@ -11,10 +11,10 @@ HAZARD_CLASSES = {
 
 PPE_VIOLATION_CLASSES = {
     "Fall-Detected": 10,
-    "No-Hardhat": 7,
-    "No-Goggles": 7,
-    "No-Mask": 5,
-    "No-Safety Vest": 3,
+    "NO-Hardhat": 7,
+    "NO-Goggles": 7,
+    "NO-Mask": 5,
+    "NO-Safety Vest": 3,
 }
 
 # Classes that exist in the PPE model but represent COMPLIANCE, not a
