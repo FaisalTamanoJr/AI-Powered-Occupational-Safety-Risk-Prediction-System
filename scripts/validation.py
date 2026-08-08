@@ -9,21 +9,17 @@ args = parser.parse_args()
 if __name__ == "__main__":
     model = YOLO(args.model)
 
-    # Run validation on model
     metrics = model.val()
 
-    # Retrieve official YOLO metrics (values are decimals 0.0 to 1.0)
-    precision = metrics.box.mp  # Mean Precision across all classes
-    recall = metrics.box.mr  # Mean Recall across all classes
-    map50 = metrics.box.map50  # Standard Detection Accuracy (mAP@0.5)
+    precision = metrics.box.mp
+    recall = metrics.box.mr
+    map50 = metrics.box.map50
 
-    # Calculate F1-Score safely
     if (precision + recall) > 0:
         f1_score = 2 * (precision * recall) / (precision + recall)
     else:
         f1_score = 0.0
 
-    # Output formatted as BOTH Decimals and Percentages
     print("\n" + "=" * 55)
     print("           YOLO MODEL EVALUATION RESULTS           ")
     print("=" * 55)

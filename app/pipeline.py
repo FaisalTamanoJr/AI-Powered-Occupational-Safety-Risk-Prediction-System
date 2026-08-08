@@ -1,9 +1,8 @@
 from dataclasses import dataclass
 
+import config
 import cv2
 from ultralytics import YOLO
-
-import config
 
 
 @dataclass
@@ -29,7 +28,6 @@ def load_models(hazard_weights_path, ppe_weights_path):
 
 
 def _frame_class_confidences(results, names):
-    """Return {class_name: best_confidence_in_frame} for one YOLO result."""
     out = {}
     boxes = results[0].boxes
     if boxes is None:
@@ -115,7 +113,6 @@ def analyze_video(video_path, hazard_model, ppe_model, progress_callback=None):
                 _update_record(rec, conf, timestamp)
                 seen_this_frame.add(cls_name)
 
-            # reset streaks for classes not seen in this analyzed frame
             for cls_name, rec in tracked.items():
                 if cls_name not in seen_this_frame:
                     rec.current_streak = 0
@@ -138,8 +135,6 @@ def compute_video_risk(tracked: dict):
     total_score = 0.0
     for rec in confirmed.values():
         avg_conf = rec.total_confidence / max(rec.occurrences, 1)
-        # duration_factor grows with how many confirmed frames it persisted,
-        # capped at 2x so one endless detection doesn't dwarf everything else
         duration_factor = 1 + min(rec.confirmed_frame_count / 20, 1.0)
         total_score += rec.weight * avg_conf * duration_factor
 

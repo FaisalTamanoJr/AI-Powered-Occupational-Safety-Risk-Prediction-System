@@ -46,8 +46,6 @@ if uploaded_file:
 
     result = compute_video_risk(tracked)
 
-    # Video on the left (narrower), risk summary on the right — both visible
-    # at once without scrolling. Adjust the ratio below to taste.
     video_col, summary_col = st.columns([1, 4])
 
     with video_col:
